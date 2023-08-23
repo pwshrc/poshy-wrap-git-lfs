@@ -7,6 +7,13 @@ if (-not (Test-Command git-lfs)) {
     return
 }
 
+[string] $git_bin = $null
+if (Test-Command hub) {
+    $git_bin = "hub"
+} elseif (Test-Command git) {
+    $git_bin = "git"
+}
+
 function Invoke-GitLfsInstall {
     & $git_bin lfs install @args
 }
@@ -28,7 +35,7 @@ function Invoke-GitLfsMigrateImport() {
 Set-Alias -Name glfsmi -Value Invoke-GitLfsMigrateImport
 
 function gplfs() {
-    local b="$(git_current_branch)"
+    [string] $b = "$(git_current_branch)"
     & $git_bin lfs push origin "$b" --all
 }
 
